@@ -7,6 +7,5 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: any) {
     return this.AuthService.register(dto);
-    
   }
 }

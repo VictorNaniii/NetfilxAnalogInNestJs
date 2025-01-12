@@ -8,6 +8,8 @@ module.exports = {
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'plugin:@typescript-eslint/recommended',
+    'next/core-web-vitals',
+    'next/typescript',
     'plugin:prettier/recommended',
   ],
   root: true,
@@ -23,5 +25,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-unsafe-declaration-merging': 'off',
+    '@typescript-eslint/no-empty-object-type': 'off',
   },
 };

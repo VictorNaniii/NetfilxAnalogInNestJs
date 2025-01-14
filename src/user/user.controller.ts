@@ -29,8 +29,8 @@ export class UserController {
   @Put('profile')
   @HttpCode(200)
   @Auth()
-  async updateProfile(@User('_id') _id: string, @Body() dto: UpdatedUserDto) {
-    return this.UserService.updatedProfile(_id, dto);
+  async updateProfile(@User('id') id: string, @Body() dto: UpdatedUserDto) {
+    return this.UserService.updatedProfile(id, dto);
   }
 
   @Get('count')

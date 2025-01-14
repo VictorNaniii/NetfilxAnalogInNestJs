@@ -24,7 +24,7 @@ export class AuthService {
     const tokens = await this.issueTokenPair(String(user._id));
 
     return {
-      user: this.returnUserFields(user),
+      user: await this.returnUserFields(user),
       ...tokens,
     };
   }
@@ -43,10 +43,12 @@ export class AuthService {
       password: await hash(dto.password, salt),
     });
 
+    const savedUser = await newUser.save();
+
     const tokens = await this.issueTokenPair(String(newUser._id));
 
     return {
-      user: this.returnUserFields(newUser),
+      user: await this.returnUserFields(savedUser),
       ...tokens,
     };
   }
@@ -63,7 +65,7 @@ export class AuthService {
 
     const tokens = await this.issueTokenPair(String(user._id));
     return {
-      user: this.returnUserFields(user),
+      user: await this.returnUserFields(user),
       ...tokens,
     };
   }

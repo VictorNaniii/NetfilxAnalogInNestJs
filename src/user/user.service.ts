@@ -21,6 +21,7 @@ export class UserService {
 
   async updatedProfile(_id: string, dto: UpdatedUserDto) {
     const user = await this.byId(_id);
+    console.log(user);
     const isSameUser = await this.UserModel.findOne({ email: dto.email });
 
     if (isSameUser && String(_id) !== String(isSameUser._id)) {
@@ -62,7 +63,7 @@ export class UserService {
       })
       .exec();
   }
-  
+
   async delete(id: string) {
     return this.UserModel.findByIdAndDelete(id).exec();
   }

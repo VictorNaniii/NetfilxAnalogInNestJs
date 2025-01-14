@@ -14,6 +14,8 @@ import { UserService } from './user.service';
 import { Auth } from 'src/auth/decorators/aut.decorator';
 import { User } from './decorators/user.decorator';
 import { UpdatedUserDto } from './dto/updated.user.dto';
+import { response } from 'express';
+import { json } from 'stream/consumers';
 
 @Controller('users')
 export class UserController {
@@ -25,12 +27,18 @@ export class UserController {
     return this.UserService.byId(_id);
   }
 
-  @UsePipes(new ValidationPipe())
-  @Put('profile')
+  // @UsePipes(new ValidationPipe())
+  // @Put('profile')
+  // @HttpCode(200)
+  // @Auth()
+  // async updateProfile(@User('id') id: string, @Body() dto: UpdatedUserDto) {
+  //   return this.UserService.updatedProfile(id, dto);
+  // }
+  @Get('test')
   @HttpCode(200)
-  @Auth()
-  async updateProfile(@User('id') id: string, @Body() dto: UpdatedUserDto) {
-    return this.UserService.updatedProfile(id, dto);
+  async getTest() {
+    console.log('test');
+    return 'test';
   }
 
   @Get('count')
@@ -55,6 +63,7 @@ export class UserController {
     @Param('id', ValidationPipe) id: string,
     @Body() dto: UpdatedUserDto,
   ) {
+    console.log(dto);
     return this.UserService.updatedProfile(id, dto);
   }
 

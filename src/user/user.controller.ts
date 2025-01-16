@@ -5,8 +5,10 @@ import {
   Get,
   HttpCode,
   Param,
+  Post,
   Put,
   Query,
+  Req,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -27,19 +29,21 @@ export class UserController {
     return this.UserService.byId(_id);
   }
 
-  // @UsePipes(new ValidationPipe())
-  // @Put('profile')
-  // @HttpCode(200)
-  // @Auth()
-  // async updateProfile(@User('id') id: string, @Body() dto: UpdatedUserDto) {
-  //   return this.UserService.updatedProfile(id, dto);
-  // }
-  @Get('test')
+  @UsePipes(new ValidationPipe())
+  @Put('profile')
   @HttpCode(200)
-  async getTest() {
-    console.log('test');
-    return 'test';
+  @Auth()
+  async updateProfile(@User('id') id: string, @Body() dto: UpdatedUserDto) {
+    return this.UserService.updatedProfile(id, dto);
   }
+
+  // @Post('test')
+  // @HttpCode(201)
+  // async getTest(@Body() body: any) {
+  //   console.log('Debugging DTO:', body); // Verifică ce conține
+  //   console.dir(body, { depth: null });
+  //   return `The dto is ${JSON.stringify(body)}`;
+  // }
 
   @Get('count')
   @HttpCode(200)
@@ -55,15 +59,14 @@ export class UserController {
     return this.UserService.getAll(searchTerm);
   }
 
-  @UsePipes(new ValidationPipe())
   @Put(':id')
   @HttpCode(200)
+  @UsePipes(new ValidationPipe())
   @Auth('admin')
   async updateUser(
-    @Param('id', ValidationPipe) id: string,
     @Body() dto: UpdatedUserDto,
+    @Param('id', ValidationPipe) id: string,
   ) {
-    console.log(dto);
     return this.UserService.updatedProfile(id, dto);
   }
 

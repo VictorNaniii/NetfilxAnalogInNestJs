@@ -21,11 +21,16 @@ export class UserService {
 
   async updatedProfile(_id: string, dto: UpdatedUserDto) {
     const user = await this.byId(_id);
-    console.log(user);
-    const isSameUser = await this.UserModel.findOne({ email: dto.email });
 
-    if (isSameUser && String(_id) !== String(isSameUser._id)) {
-      throw new NotFoundException('Email busy');
+    if (dto.email) {
+      const isSameUser = await this.UserModel.findOne({ email: dto.email });
+      if (isSameUser && String(_id) !== String(isSameUser._id)) {
+        throw new NotFoundException('Email busy');
+      }
+    }
+
+    if (dto.email) {
+      user.email = dto.email;
     }
 
     if (dto.password) {
@@ -33,19 +38,18 @@ export class UserService {
       user.password = await hash(dto.password, salt);
     }
 
-    user.email = dto.email;
-
-    if (dto.isAdmin || dto.isAdmin === false) {
+    if (dto.isAdmin !== undefined) {
       user.isAdmin = dto.isAdmin;
     }
 
     await user.save();
 
-    return;
+    return user;
   }
 
   async getCount() {
-    return this.UserModel.find().count().exec();
+    const userCount = await this.UserModel.countDocuments().exec();
+    return userCount;
   }
 
   async getAll(searchTerm?: string) {

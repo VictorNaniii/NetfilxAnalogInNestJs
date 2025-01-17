@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { GenereModule } from './genere/genere.module';
+import { FileModule } from './file/file.module';
+import { ActorModule } from './actor/actor.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { GenereModule } from './genere/genere.module';
     AuthModule,
     UserModule,
     GenereModule,
+    FileModule,
+    ActorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

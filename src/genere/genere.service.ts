@@ -4,6 +4,7 @@ import { GenerModule } from './genere.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { CreateGenereDto } from './dto/create.dto.gener';
 import { genSalt } from 'bcryptjs';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class GenereService {
@@ -49,13 +50,18 @@ export class GenereService {
 
   // --Admin Place
   async update(id: string, dto: CreateGenereDto) {
-    return this.GenerModule.findByIdAndUpdate(id, dto, {
+    const updateGenere = await this.GenerModule.findByIdAndUpdate(id, dto, {
       new: true,
     }).exec();
+
+    if (!updateGenere) throw new NotFoundException('Genere is not found');
+    return updateGenere;
   }
 
   async delete(id: string) {
-    return this.GenerModule.findByIdAndDelete(id).exec();
+    const deleteGenere = await this.GenerModule.findByIdAndDelete(id).exec();
+    if (!deleteGenere) throw new NotFoundException('Genere not found');
+    return deleteGenere;
   }
 
   async byId(_id: string) {

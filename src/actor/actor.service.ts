@@ -13,7 +13,10 @@ export class ActorService {
   ) {}
 
   async bySlug(slug: string) {
-    return this.ActorModel.findOne({ slug }).exec();
+    const actorSlug = await this.ActorModel.findOne({ slug }).exec();
+    if (!actorSlug) throw new NotFoundException('Actor not found');
+
+    return actorSlug;
   }
 
   async getAll(searchTerm?: string) {

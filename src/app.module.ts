@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GenereModule } from './genere/genere.module';
 import { FileModule } from './file/file.module';
 import { ActorModule } from './actor/actor.module';
+import { MovieModule } from './movie/movie.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ActorModule } from './actor/actor.module';
     GenereModule,
     FileModule,
     ActorModule,
+    MovieModule,
   ],
   controllers: [AppController],
   providers: [AppService],

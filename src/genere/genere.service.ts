@@ -38,7 +38,9 @@ export class GenereService {
   }
 
   async bySlug(slug: string) {
-    return this.GenerModule.findOne({ slug }).exec();
+    const genereSlug = await this.GenerModule.findOne({ slug }).exec();
+    if (!genereSlug) throw new NotFoundException('Genere not found');
+    return genereSlug;
   }
 
   async getColections() {

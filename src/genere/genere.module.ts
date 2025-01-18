@@ -4,6 +4,7 @@ import { GenereService } from './genere.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModel, UserSchema } from 'src/user/user.model';
 import { GenerModule, GenerSchema } from './genere.model';
+import { MovieService } from 'src/movie/movie.service';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { GenerModule, GenerSchema } from './genere.model';
         schema: GenerSchema,
       },
     ]),
+    MovieService,
   ],
   controllers: [GenereController],
   providers: [GenereService],

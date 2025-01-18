@@ -43,7 +43,7 @@ export class MovieService {
     return doc;
   }
 
-  async byGenres(genreIds: string[]) {
+  async byGenres(genreIds: string[] | Types.ObjectId[]) {
     const doc = await this.MovieModel.findOne({
       generes: { $in: genreIds },
     }).exec();
@@ -76,11 +76,15 @@ export class MovieService {
   }
 
   async updateRating(id: Types.ObjectId, newRating: number) {
-    return this.MovieModel.findByIdAndUpdate(id, {
-      rating: newRating,
-    },{
-      new: true
-    });
+    return this.MovieModel.findByIdAndUpdate(
+      id,
+      {
+        rating: newRating,
+      },
+      {
+        new: true,
+      },
+    );
   }
 
   // Only for Admin

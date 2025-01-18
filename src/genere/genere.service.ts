@@ -5,12 +5,15 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { CreateGenereDto } from './dto/create.dto.gener';
 import { genSalt } from 'bcryptjs';
 import { throwError } from 'rxjs';
+import { MovieService } from './../movie/movie.service';
+import { Icolection } from './genere.interface.dto';
 
 @Injectable()
 export class GenereService {
   constructor(
     @InjectModel(GenerModule.name)
     private readonly GenerModule: ModelType<GenerModule>,
+    private readonly MovieService: MovieService,
   ) {}
 
   async getAllGenere(searchTerm?: string) {
@@ -45,8 +48,20 @@ export class GenereService {
 
   async getColections() {
     const geners = await this.getAllGenere();
-    const collections = geners;
-    // NED WIL WRITE -!!
+    const collections = await Promise.all(
+      geners.map(async (genre) => {
+        const moviesByGenre = await this.MovieService.byGenres([genre._id]);
+
+        const result: Icolection = {
+          _id: String(genre._id),
+          image: moviesByGenre[0].bigposter,
+          slug: genre.slug,
+          title: genre.name,
+        };
+
+        return result;
+      }),
+    );
     return collections;
   }
 

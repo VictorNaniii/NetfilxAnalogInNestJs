@@ -30,9 +30,6 @@ export class MovieModel extends TimeStamps {
   title: string;
 
   @prop()
-  description: string;
-
-  @prop()
   parameters?: Parameters;
 
   @prop()

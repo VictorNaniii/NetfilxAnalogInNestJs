@@ -43,7 +43,7 @@ export class MovieService {
     return doc;
   }
 
-  async byGenres(genreIds: Types.ObjectId[]) {
+  async byGenres(genreIds: string[]) {
     const doc = await this.MovieModel.findOne({
       generes: { $in: genreIds },
     }).exec();
@@ -57,6 +57,7 @@ export class MovieService {
       {
         $inc: { countOpened: 1 },
       },
+      { new: true },
     ).exec();
 
     if (!updateDoc) throw new NotFoundException('The movie not found');
@@ -86,7 +87,6 @@ export class MovieService {
     const defaultValue: CreateMovieDto = {
       actors: [],
       bigposter: '',
-      description: '',
       generes: [],
       poster: '',
       slug: '',

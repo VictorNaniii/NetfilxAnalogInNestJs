@@ -1,18 +1,22 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   Post,
   Put,
   Type,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { IdValidationPipe } from 'src/pipes/id.validation.pipes';
 import { Types } from 'mongoose';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Auth } from 'src/auth/decorators/aut.decorator';
+import { CreateMovieDto } from './create-movie.dto';
 
 @Controller('movies')
 export class MovieController {
@@ -27,10 +31,10 @@ export class MovieController {
   async byActorId(@Param('actorId', IdValidationPipe) actorId: Types.ObjectId) {
     return this.movieService.byActor(actorId);
   }
-
+  @UsePipes(new ValidationPipe())
   @Post('by-genres')
   @HttpCode(200)
-  async byGenresId(@Body('genreIds') genreIds: Types.ObjectId[]) {
+  async byGenresId(@Body('genreIds') genreIds: string[]) {
     return this.movieService.byGenres(genreIds);
   }
 
@@ -50,8 +54,20 @@ export class MovieController {
   async get(@Param('id', IdValidationPipe) id: Types.ObjectId) {
     return this.movieService.byId(id);
   }
-
-
-  
-
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth('admin')
+  @Put(':id')
+  async update(
+    @Param('id', IdValidationPipe) id: string,
+    @Body() dto: CreateMovieDto,
+  ) {
+    return this.movieService.update(id, dto);
+  }
+  @Delete(':id')
+  @HttpCode(200)
+  @Auth('admin')
+  async delete(@Param('id', IdValidationPipe) id: string) {
+    return this.movieService.delete(id);
+  }
 }

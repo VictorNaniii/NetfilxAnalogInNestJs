@@ -34,11 +34,22 @@ export class ActorService {
         ],
       };
     }
-    // Ned wil add agregation aftert creating movie model -!!
 
-    return this.ActorModel.find(options)
-      .select('-updateAt -__v')
-      .sort({ createdAt: 'desc' })
+    return this.ActorModel.aggregate()
+      .match(options)
+      .lookup({
+        from: 'Movie',
+        localField: '_id',
+        foreignField: 'actors',
+        as: 'movies',
+      })
+      .addFields({
+        countMovies: {
+          $size: '$movies',
+        },
+      })
+      .project({ __v: 0, updatedAt: 0, movies: 0 })
+      .sort({ createdAt: -1 })
       .exec();
   }
   async byId(id: string) {
